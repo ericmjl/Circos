@@ -6,10 +6,12 @@ import math
 from matplotlib.path import Path
 
 class CircosPlot(object):
-    def __init__(self, nodes, edges, radius, nodecolor='black', figsize=(8,8), ax=None, fig=None):
+    def __init__(self, nodes, edges, radius, nodecolor='black', edgecolor='none', edgealpha=1.0, figsize=(8,8), ax=None, fig=None):
         self.nodes = nodes # Dictionary of nodes
         self.edges = edges # Dictionary of Edges
         self.nodecolor = nodecolor
+        self.edgecolor = edgecolor
+        self.edgealpha = edgealpha
         self.radius = radius
         if fig == None:
             self.fig = plt.figure(figsize=figsize)
@@ -35,10 +37,16 @@ class CircosPlot(object):
     def add_nodes(self):
         r = self.radius
         node_r = self.node_radius
-        for node in self.nodes:
+        if isinstance(self.nodecolor, str):
+            nodes_and_colors = zip(self.nodes, [color] * len(self.nodes))
+        elif hasattr(self.nodecolor, '__iter__') and (len(self.nodes) == len(self.nodecolor)):
+            nodes_and_colors = zip(self.nodes, self.nodecolor)
+        else:
+            raise TypeError("nodecolor must be a string or iterable of the same length as nodes.")
+        for node, color in nodes_and_colors:
             theta = self.node_theta(node)
             x, y = get_cartesian(r, theta)
-            node_patch = patches.Ellipse((x,y), node_r, node_r, facecolor=self.nodecolor, lw=0)
+            node_patch = patches.Ellipse((x,y), node_r, node_r, facecolor=color, lw=0)
             self.ax.add_patch(node_patch)
 
 
@@ -55,7 +63,8 @@ class CircosPlot(object):
 
         path = Path(verts, codes)
 
-        patch = patches.PathPatch(path, lw=1, facecolor='none')
+        patch = patches.PathPatch(path, lw=1, facecolor='none',
+                                  edgecolor=self.edgecolor, alpha=self.edgealpha)
         self.ax.add_patch(patch)
 
 
