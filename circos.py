@@ -6,12 +6,53 @@ import math
 from matplotlib.path import Path
 
 class CircosPlot(object):
-    def __init__(self, nodes, edges, radius, nodecolor='black', edgecolor='none', edgealpha=1.0, figsize=(8,8), ax=None, fig=None):
-        self.nodes = nodes # Dictionary of nodes
-        self.edges = edges # Dictionary of Edges
-        self.nodecolor = nodecolor
-        self.edgecolor = edgecolor
-        self.edgealpha = edgealpha
+    def __init__(self, nodes, edges, radius,
+                 nodecolor=None, edgecolor=None,
+                 nodeprops=None, edgeprops=None,
+                 figsize=(8,8), ax=None, fig=None):
+        self.nodes = nodes # list of nodes
+        self.edges = edges # list of edge tuples
+        
+        # Make sure props are dictionaries if passed in
+        # Node props
+        if nodeprops is not None:
+            if isinstance(nodeprops, dict):
+                self.nodeprops = nodeprops
+            else:
+                raise TypeError("nodeprops must be a dictionary")
+        else:
+            self.nodeprops = {}
+        # Edge props
+        if edgeprops is not None:
+            if isinstance(edgeprops, dict):
+                self.edgeprops = edgeprops
+            else:
+                raise TypeError("edgeprops must be a dictionary")
+        else:
+            self.edgeprops = {}
+
+        # Set colors. Priority: nodecolor > nodeprops > default
+        # Node color
+        if nodecolor is not None:
+            self.nodecolor = nodecolor
+        elif nodeprops:
+            try:
+                self.nodecolor = nodeprops.pop('facecolor')
+            except KeyError:
+                self.nodecolor = 'blue'
+        else:
+            self.nodecolor = 'blue'
+        # Edge color
+        if edgecolor is not None:
+            self.edgecolor = edgecolor
+        elif edgeprops:
+            try:
+                self.edgecolor = edgeprops.pop('edgecolor')
+            except KeyError:
+                self.edgecolor = 'black'
+        else:
+            self.edgecolor = 'black'
+
         self.radius = radius
         if fig == None:
             self.fig = plt.figure(figsize=figsize)
@@ -37,8 +78,12 @@ class CircosPlot(object):
     def add_nodes(self):
         r = self.radius
         node_r = self.node_radius
+        #if 'color' in self.nodeprops:
+        #    self.nodeprops.pop('color')
+        if 'facecolor' in self.nodeprops:
+            self.nodeprops.pop('facecolor')
         if isinstance(self.nodecolor, str):
-            nodes_and_colors = zip(self.nodes, [color] * len(self.nodes))
+            nodes_and_colors = zip(self.nodes, [self.nodecolor] * len(self.nodes))
         elif hasattr(self.nodecolor, '__iter__') and (len(self.nodes) == len(self.nodecolor)):
             nodes_and_colors = zip(self.nodes, self.nodecolor)
         else:
@@ -46,7 +91,9 @@ class CircosPlot(object):
         for node, color in nodes_and_colors:
             theta = self.node_theta(node)
             x, y = get_cartesian(r, theta)
-            node_patch = patches.Ellipse((x,y), node_r, node_r, facecolor=color, lw=0)
+            self.nodeprops['facecolor'] = color
+            node_patch = patches.Ellipse((x,y), node_r, node_r,
+                                         lw=0, **self.nodeprops)
             self.ax.add_patch(node_patch)
 
 
@@ -62,9 +109,9 @@ class CircosPlot(object):
         codes = [Path.MOVETO, Path.CURVE3, Path.CURVE3]
 
         path = Path(verts, codes)
-
-        patch = patches.PathPatch(path, lw=1, facecolor='none',
-                                  edgecolor=self.edgecolor, alpha=self.edgealpha)
+        self.edgeprops['facecolor'] = 'none'
+        self.edgeprops['edgecolor'] = self.edgecolor 
+        patch = patches.PathPatch(path, lw=1, **self.edgeprops)
         self.ax.add_patch(patch)
 
 
