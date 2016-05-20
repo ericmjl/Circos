@@ -1,5 +1,6 @@
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
+from pip.req import parse_requirements
 
 
 # Utility function to read the README file.
@@ -9,6 +10,9 @@ from setuptools import setup
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
+install_reqs = parse_requirements('requirements.txt', session=False)
+reqs = [str(ir.req) for ir in install_reqs]
+
 setup(name="Circos",
       version="1.1",
       author="Eric J. Ma, Justin Zabilansky, Jon Charest",
@@ -17,8 +21,9 @@ setup(name="Circos",
       license="MIT",
       keywords="network visualization, matplotlib, circos",
       url="http://github.com/ericmjl/Circos",
-      packages=[],
-      data_files=['README.md'],
+      packages=find_packages(),
+      package_data={'': ['README.md']},
+      install_requires=reqs,
       long_description=read('README.md'),
       classifiers=["Topic :: Scientific/Engineering :: Visualization"],
       )
