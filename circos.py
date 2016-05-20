@@ -108,37 +108,53 @@ class CircosPlot(object):
                                          lw=0, **self.nodeprops)
             self.ax.add_patch(node_patch)
 
-    def draw_edge(self, node1, node2):
-        start_theta = self.node_theta(node1)
-        end_theta = self.node_theta(node2)
-        # middle_theta = (start_theta + end_theta)/2.0
-        # delta_theta = abs(end_theta - start_theta)
-        # middle_r = self.radius * (1 - delta_theta / np.pi)
+    # def draw_edge(self, node1, node2):
+    #     start_theta = self.node_theta(node1)
+    #     end_theta = self.node_theta(node2)
+    #     # middle_theta = (start_theta + end_theta)/2.0
+    #     # delta_theta = abs(end_theta - start_theta)
+    #     # middle_r = self.radius * (1 - delta_theta / np.pi)
 
-        # verts = [get_cartesian(self.radius, start_theta),
-        #          get_cartesian(middle_theta, middle_r),
-        #          get_cartesian(self.radius,end_theta)]
-        verts = [get_cartesian(self.radius, start_theta),
-                 (0, 0),
-                 get_cartesian(self.radius, end_theta)]
-        codes = [Path.MOVETO, Path.CURVE3, Path.CURVE3]
+    #     # verts = [get_cartesian(self.radius, start_theta),
+    #     #          get_cartesian(middle_theta, middle_r),
+    #     #          get_cartesian(self.radius,end_theta)]
+    #     verts = [get_cartesian(self.radius, start_theta),
+    #              (0, 0),
+    #              get_cartesian(self.radius, end_theta)]
+    #     codes = [Path.MOVETO, Path.CURVE3, Path.CURVE3]
 
-        path = Path(verts, codes)
-        self.edgeprops['facecolor'] = 'none'
-        self.edgeprops['edgecolor'] = self.edgecolor
-        patch = patches.PathPatch(path, lw=1, **self.edgeprops)
-        self.ax.add_patch(patch)
+    #     path = Path(verts, codes)
+    #     self.edgeprops['facecolor'] = 'none'
+    #     self.edgeprops['edgecolor'] = self.edgecolor
+    #     patch = patches.PathPatch(path, lw=1, **self.edgeprops)
+    #     self.ax.add_patch(patch)
 
     def node_theta(self, node):
-        ''' Maps node to Angle '''
+        """
+        Maps node to Angle.
+        """
         i = self.nodes.index(node)
         theta = i*2*np.pi/len(self.nodes)
 
         return theta
 
     def add_edges(self):
+        """
+        Draws edges to screen.
+        """
         for start, end in self.edges:
-            self.draw_edge(start, end)
+            start_theta = self.node_theta(start)
+            end_theta = self.node_theta(end)
+            verts = [get_cartesian(self.radius, start_theta),
+                     (0, 0),
+                     get_cartesian(self.radius, end_theta)]
+            codes = [Path.MOVETO, Path.CURVE3, Path.CURVE3]
+
+            path = Path(verts, codes)
+            self.edgeprops['facecolor'] = 'none'
+            self.edgeprops['edgecolor'] = self.edgecolor
+            patch = patches.PathPatch(path, lw=1, **self.edgeprops)
+            self.ax.add_patch(patch)
 
 
 def get_cartesian(r, theta):
