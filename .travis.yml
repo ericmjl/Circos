@@ -23,7 +23,7 @@ install:
   # Install Python, py.text, and required packages.
   - conda env create -f build-env.yml
   - source activate build
-  - python setup.py install
+  - pip install -r requirements.txt
 
 script:
   # Your test script goes here
