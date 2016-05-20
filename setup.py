@@ -10,7 +10,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(name="Circos",
-      version="1.0",
+      version="1.1",
       author="Eric J. Ma, Justin Zabilansky, Jon Charest",
       author_email="ericmajinglong@gmail.com",
       description=("Circos plots in Python!"),
@@ -18,6 +18,7 @@ setup(name="Circos",
       keywords="network visualization, matplotlib, circos",
       url="http://github.com/ericmjl/Circos",
       packages=[],
+      data_files=['README.md'],
       long_description=read('README.md'),
       classifiers=["Topic :: Scientific/Engineering :: Visualization"],
       )
