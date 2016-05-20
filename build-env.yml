@@ -1,6 +1,16 @@
-name: build-test
+name: build
 dependencies:
-- numpy
 - matplotlib
+- mkl
+- numpy
+- openssl
+- pip
+- python=3.5
+- readline
+- setuptools
+- tk
+- wheel
+- xz
+- zlib
 - pip:
-  - pytest
+  - pytest
