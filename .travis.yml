@@ -27,5 +27,5 @@ install:
 
 script:
   # Your test script goes here
-  - py.test
+  # - py.test
 
