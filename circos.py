@@ -1,18 +1,19 @@
-import numpy as np 
-import matplotlib.pyplot as plt 
+import numpy as np
+import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-import math
+# import math
 
 from matplotlib.path import Path
+
 
 class CircosPlot(object):
     def __init__(self, nodes, edges, radius,
                  nodecolor=None, edgecolor=None,
                  nodeprops=None, edgeprops=None,
-                 figsize=(8,8), ax=None, fig=None):
-        self.nodes = nodes # list of nodes
-        self.edges = edges # list of edge tuples
-        
+                 figsize=(8, 8), ax=None, fig=None):
+        self.nodes = nodes  # list of nodes
+        self.edges = edges  # list of edge tuples
+
         # Make sure props are dictionaries if passed in
         # Node props
         if nodeprops is not None:
@@ -54,11 +55,11 @@ class CircosPlot(object):
             self.edgecolor = 'black'
 
         self.radius = radius
-        if fig == None:
+        if fig is None:
             self.fig = plt.figure(figsize=figsize)
         else:
             self.fig = fig
-        if ax == None:
+        if ax is None:
             self.ax = self.fig.add_subplot(111)
         else:
             self.ax = ax
@@ -70,50 +71,63 @@ class CircosPlot(object):
         for k in self.ax.spines.keys():
             self.ax.spines[k].set_visible(False)
 
-
     def draw(self):
         self.add_nodes()
         self.add_edges()
 
     def add_nodes(self):
+        """
+        Draws nodes onto the canvas with colours.
+        """
         r = self.radius
         node_r = self.node_radius
         #if 'color' in self.nodeprops:
         #    self.nodeprops.pop('color')
         if 'facecolor' in self.nodeprops:
             self.nodeprops.pop('facecolor')
+        # Check if self.nodecolor is a string. If so, this color gets applied
+        # to all nodes.
         if isinstance(self.nodecolor, str):
-            nodes_and_colors = zip(self.nodes, [self.nodecolor] * len(self.nodes))
-        elif hasattr(self.nodecolor, '__iter__') and (len(self.nodes) == len(self.nodecolor)):
+            nodes_and_colors = zip(self.nodes,
+                                   [self.nodecolor] * len(self.nodes))
+        # Check if nodecolor is an iterable. If so and same length as nodes.
+        # This applies each matched color to that node.
+        elif hasattr(self.nodecolor, '__iter__') and \
+                (len(self.nodes) == len(self.nodecolor)):
             nodes_and_colors = zip(self.nodes, self.nodecolor)
+        # Throw error if above two conditions are not met.
         else:
-            raise TypeError("nodecolor must be a string or iterable of the same length as nodes.")
+            raise TypeError("""nodecolor must be a string or iterable of the
+                same length as nodes.""")
+        # Draw the nodes to screen.
         for node, color in nodes_and_colors:
             theta = self.node_theta(node)
             x, y = get_cartesian(r, theta)
             self.nodeprops['facecolor'] = color
-            node_patch = patches.Ellipse((x,y), node_r, node_r,
+            node_patch = patches.Ellipse((x, y), node_r, node_r,
                                          lw=0, **self.nodeprops)
             self.ax.add_patch(node_patch)
-
 
     def draw_edge(self, node1, node2):
         start_theta = self.node_theta(node1)
         end_theta = self.node_theta(node2)
-        middle_theta = (start_theta + end_theta)/2.0
-        delta_theta = abs(end_theta - start_theta)
-        middle_r = self.radius * (1 - delta_theta / np.pi) 
+        # middle_theta = (start_theta + end_theta)/2.0
+        # delta_theta = abs(end_theta - start_theta)
+        # middle_r = self.radius * (1 - delta_theta / np.pi)
 
-        # verts = [get_cartesian(self.radius, start_theta), get_cartesian(middle_theta, middle_r), get_cartesian(self.radius,end_theta)]
-        verts = [get_cartesian(self.radius, start_theta), (0,0), get_cartesian(self.radius,end_theta)]
+        # verts = [get_cartesian(self.radius, start_theta),
+        #          get_cartesian(middle_theta, middle_r),
+        #          get_cartesian(self.radius,end_theta)]
+        verts = [get_cartesian(self.radius, start_theta),
+                 (0, 0),
+                 get_cartesian(self.radius, end_theta)]
         codes = [Path.MOVETO, Path.CURVE3, Path.CURVE3]
 
         path = Path(verts, codes)
         self.edgeprops['facecolor'] = 'none'
-        self.edgeprops['edgecolor'] = self.edgecolor 
+        self.edgeprops['edgecolor'] = self.edgecolor
         patch = patches.PathPatch(path, lw=1, **self.edgeprops)
         self.ax.add_patch(patch)
-
 
     def node_theta(self, node):
         ''' Maps node to Angle '''
