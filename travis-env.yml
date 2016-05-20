@@ -1,0 +1,6 @@
+name: build-test
+dependencies:
+- numpy
+- matplotlib
+- pip:
+  - pytest
