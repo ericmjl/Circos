@@ -14,7 +14,7 @@ install_reqs = parse_requirements('requirements.txt', session=False)
 reqs = [str(ir.req) for ir in install_reqs]
 
 setup(name="Circos",
-      version="1.2",
+      version="1.3",
       author="Eric J. Ma, Justin Zabilansky, Jon Charest",
       author_email="ericmajinglong@gmail.com",
       description=("Circos plots in Python!"),
@@ -23,7 +23,7 @@ setup(name="Circos",
       url="http://github.com/ericmjl/Circos",
       # packages=find_packages(),
       py_modules=['circos'],
-      package_data={'': ['README.md']},
+      # package_data={'': ['README.md', 'requirements.txt']},
       install_requires=reqs,
       long_description=read('README.md'),
       classifiers=["Topic :: Scientific/Engineering :: Visualization"],
