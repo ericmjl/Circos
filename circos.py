@@ -81,7 +81,7 @@ class CircosPlot(object):
         """
         r = self.radius
         node_r = self.node_radius
-        #if 'color' in self.nodeprops:
+        # if 'color' in self.nodeprops:
         #    self.nodeprops.pop('color')
         if 'facecolor' in self.nodeprops:
             self.nodeprops.pop('facecolor')
