@@ -29,4 +29,6 @@ script:
   # Your test script goes here
   # - py.test
   - echo "hello!"
-
+  - pycodestyle
+  - pip uninstall circos
+  - conda install -c ericmjl circos
