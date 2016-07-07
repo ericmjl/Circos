@@ -30,5 +30,5 @@ script:
   # Your test script goes here
   # - py.test
   - pycodestyle .
-  - pip uninstall circos
+  - pip uninstall -y circos
   - conda install -c ericmjl circos
