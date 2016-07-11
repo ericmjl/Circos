@@ -1,5 +1,6 @@
 import os
 from setuptools import setup
+from pip.req import parse_requirements
 
 
 def read(fname):
@@ -14,6 +15,9 @@ def read(fname):
         os.path.join(os.path.dirname(__file__), fname)
         ).read()
 
+install_reqs = parse_requirements('requirements.txt', session=False)
+reqs = [str(ir.req) for ir in install_reqs]
+
 setup(name="Circos",
       version="1.3.4",
       author="Eric J. Ma, Justin Zabilansky, Jon Charest",
@@ -25,10 +29,7 @@ setup(name="Circos",
       # packages=find_packages(),
       py_modules=['circos'],
       # package_data={'': ['README.md', 'requirements.txt']},
-      install_requires=['matplotlib',
-                        'numpy',
-                        'setuptools',
-                        'pycodestyle'],
+      install_requires=reqs,
       long_description=read('README.md'),
       classifiers=["Topic :: Scientific/Engineering :: Visualization"],
       )
