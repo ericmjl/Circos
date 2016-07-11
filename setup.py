@@ -15,7 +15,7 @@ def read(fname):
         ).read()
 
 setup(name="Circos",
-      version="1.3",
+      version="1.3.4",
       author="Eric J. Ma, Justin Zabilansky, Jon Charest",
       author_email="ericmajinglong@gmail.com",
       description=("Circos plots in Python!"),
