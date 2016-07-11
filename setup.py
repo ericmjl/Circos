@@ -3,12 +3,17 @@ from setuptools import setup
 from pip.req import parse_requirements
 
 
-# Utility function to read the README file.
-# Used for the long_description.  It's nice, because now 1) we have a top level
-# README file and 2) it's easier to type in the README file than to put a raw
-# string in below ...
 def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    """
+    Utility function to read the README file. Used for the
+    long_description.  It's nice, because now:
+    1. we have a top level README file and
+    2. it's easier to type in the README file than to put a raw
+       string in below ...
+    """
+    return open(
+        os.path.join(os.path.dirname(__file__), fname)
+        ).read()
 
 install_reqs = parse_requirements('requirements.txt', session=False)
 reqs = [str(ir.req) for ir in install_reqs]
