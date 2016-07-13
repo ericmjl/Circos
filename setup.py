@@ -1,5 +1,5 @@
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 from pip.req import parse_requirements
 
 
@@ -26,8 +26,8 @@ setup(name="Circos",
       license="MIT",
       keywords="network visualization, matplotlib, circos",
       url="http://github.com/ericmjl/Circos",
-      # packages=find_packages(),
-      py_modules=['circos'],
+      # packages='src',
+      py_modules=['src/circos'],
       # package_data={'': ['README.md', 'requirements.txt']},
       install_requires=reqs,
       long_description=read('README.md'),

@@ -1,4 +1,4 @@
-matplotlib
 numpy
+matplotlib
 setuptools
 pycodestyle
