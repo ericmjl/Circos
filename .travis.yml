@@ -28,6 +28,6 @@ install:
 
 script:
   # Your test script goes here
-  - pycodestyle .
+  - pycodestyle circos/.
   - pip uninstall -y circos
   - conda install -c ericmjl circos
