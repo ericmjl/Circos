@@ -1,1 +1,3 @@
-from circos import CircosPlot
+def test_import():
+    from circos import CircosPlot
+
