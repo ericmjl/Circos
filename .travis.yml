@@ -23,5 +23,4 @@ install:
 script:
   # Your test script goes here
   - pycodestyle circos/.
-  - pip uninstall -y circos
-  - conda install -c ericmjl circos
+  - py.test tests/.
