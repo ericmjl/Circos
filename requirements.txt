@@ -1,4 +1,4 @@
 numpy==1.11.1
 matplotlib==1.5.1
-setuptools==25.1.1
+setuptools==26.1.1
 pycodestyle==2.0.0
